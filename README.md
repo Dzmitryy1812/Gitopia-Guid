@@ -162,3 +162,17 @@ gitopiad tx staking edit-validator \
 --gas-adjustment="1"
  ```
 После запуска вадидатора идем заполнять [форму](https://airtable.com/shrMQFJxcsMD0XV2M), указываем все свои данные.
+
+Для быстрой синзронизации ноды делаем снепшот по желанию(взят с kjnodes.com) 
+```
+sudo systemctl stop gitopiad
+cp $HOME/.gitopia/data/priv_validator_state.json $HOME/.gitopia/priv_validator_state.json.backup
+rm -rf $HOME/.gitopia/data
+```
+```
+curl -L https://snapshots.kjnodes.com/gitopia-testnet/snapshot_latest.tar.lz4 | lz4 -dc - | tar -xf - -C $HOME/.gitopia
+mv $HOME/.gitopia/priv_validator_state.json.backup $HOME/.gitopia/data/priv_validator_state.json
+```
+```
+sudo systemctl start gitopiad && journalctl -u gitopiad -f --no-hostname -o cat
+```
